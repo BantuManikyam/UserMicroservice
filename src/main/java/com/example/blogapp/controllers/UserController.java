@@ -2,41 +2,46 @@ package com.example.blogapp.controllers;
 
 import com.example.blogapp.models.User;
 import com.example.blogapp.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@Api(tags = "User Management")
 public class UserController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation("Create a new user")
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable int userId) {
-        return ResponseEntity.ok(userService.getUserById(userId));
-    }
-
+    @ApiOperation("Get all users")
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
+    @ApiOperation("Get a user by ID")
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable int userId) {
+        return userService.getUserById(userId);
+    }
+
+    @ApiOperation("Update a user")
     @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable int userId, @RequestBody User userDetails) {
-        return ResponseEntity.ok(userService.updateUser(userId, userDetails));
+    public User updateUser(@PathVariable int userId, @RequestBody User userDetails) {
+        return userService.updateUser(userId, userDetails);
     }
 
+    @ApiOperation("Delete a user")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable int userId) {
+    public void deleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
-    }
-}
+    }}
